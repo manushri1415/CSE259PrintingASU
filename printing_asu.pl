@@ -5,7 +5,7 @@ drawHorizontalLine(Symbol, 0) :- nl.
 drawHorizontalLine(Symbol, N) :- drawSymbol(Symbol, N).
 
 drawVerticalLinesWithSpace(Symbol, 0, Width).
-drawVerticalLinesWithSpace(Symbol, Height, Width) :- 
+drawVerticalLinesWithSpace(Symbol, Height, Width) :-
   Height > 0,
   write(Symbol),
   drawSymbol(' ', Width - 2),
@@ -19,8 +19,8 @@ drawVerticalLinesWithSpace(Symbol, Height, Width) :-
 drawA(TextWidth, TextHeight, FontSize, CurrentLine, ColumnNumber) :-
   ColumnNumber >= TextWidth.
 
-/* 
- * Covers the left-most and the right-most columns that only have stars 
+/*
+ * Covers the left-most and the right-most columns that only have stars
  */
 drawA(TextWidth, TextHeight, FontSize, CurrentLine, ColumnNumber) :-
   (
@@ -31,9 +31,9 @@ drawA(TextWidth, TextHeight, FontSize, CurrentLine, ColumnNumber) :-
   NextColumn is ColumnNumber + FontSize,
   drawA(TextWidth, TextHeight, FontSize, CurrentLine, NextColumn).
 
-/* 
+/*
  * Covers the middle segment
- * Will have either stars or spaces 
+ * Will have either stars or spaces
  */
 drawA(TextWidth, TextHeight, FontSize, CurrentLine, ColumnNumber) :-
   (ColumnNumber >= FontSize, ColumnNumber < FontSize * 2),
@@ -63,7 +63,7 @@ drawA(TextWidth, TextHeight, FontSize, CurrentLine, ColumnNumber) :-
 drawS(TextWidth,TextHeight,FontSize,CurrentLine,ColumnNumber) :-
   ColumnNumber >= TextWidth.
 
-/* this is the top part of the 
+/* this is the top part of the
 s-> ****
     ****  (changes based on the width) */
 drawS(TextWidth,TextHeight,FontSize,CurrentLine,ColumnNumber) :-
@@ -87,7 +87,7 @@ drawS(TextWidth, TextHeight, FontSize, CurrentLine, ColumnNumber) :-
 drawS(TextWidth, TextHeight, FontSize, CurrentLine, ColumnNumber) :-
   CurrentLine >= 3* FontSize,
   CurrentLine < 4* FontSize,
-  drawSymbol(' ', TextWidth - FontSize), 
+  drawSymbol(' ', TextWidth - FontSize),
   drawSymbol('*',FontSize).
 
 /* bottom part, simialr to the top one*/
@@ -177,6 +177,13 @@ drawVerticalLinesWithCharacters(LeftRightMargin, BottomTopMargin, SpaceBetweenCh
 asu(LeftRightMargin, BottomTopMargin, SpaceBetweenCharacters, FontSize) :-
   /* verify that the variables are integers */
   integer(LeftRightMargin), integer(BottomTopMargin), integer(SpaceBetweenCharacters), integer(FontSize),
+
+
+  %Boundary Checks
+  FontSize>0,
+  SpaceBetweenCharacters > 0,
+  BottomTopMargin >=0,
+  LeftRightMargin >=0,
 
   /* calculate the height and width */
   Width is (LeftRightMargin * 2 + SpaceBetweenCharacters * 2 + FontSize * 3 * 3 + 2),
