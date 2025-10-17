@@ -1,10 +1,8 @@
 drawSymbol(Symbol, 0).
 drawSymbol(Symbol, N) :- N > 0, write(Symbol), N1 is N - 1, drawSymbol(Symbol, N1).
 
-
 drawHorizontalLine(Symbol, 0) :- nl.
 drawHorizontalLine(Symbol, N) :- drawSymbol(Symbol, N).
-
 
 drawVerticalLinesWithSpace(Symbol, 0, Width).
 drawVerticalLinesWithSpace(Symbol, Height, Width) :- 
@@ -15,7 +13,6 @@ drawVerticalLinesWithSpace(Symbol, Height, Width) :-
   nl,
   Height1 is Height - 1,
   drawVerticalLinesWithSpace(Symbol, Height1, Width).
-
 
 /*-------------------------------------------------------------------------------------------------*/
 /* draw A */
@@ -33,7 +30,6 @@ drawA(TextWidth, TextHeight, FontSize, CurrentLine, ColumnNumber) :-
   drawSymbol('*', FontSize),
   NextColumn is ColumnNumber + FontSize,
   drawA(TextWidth, TextHeight, FontSize, CurrentLine, NextColumn).
-
 
 /* 
  * Covers the middle segment
@@ -62,16 +58,81 @@ drawA(TextWidth, TextHeight, FontSize, CurrentLine, ColumnNumber) :-
 /* draw A */
 /*-------------------------------------------------------------------------------------------------*/
 
-
-/*-------------------------------------------------------------------------------------------------*/
 /* WRITE RULES FOR drawS HERE*/
 /*-------------------------------------------------------------------------------------------------*/
+drawS(TextWidth,TextHeight,FontSize,CurrentLine,ColumnNumber) :-
+  ColumnNumber >= TextWidth.
+
+/* this is the top part of the 
+s-> ****
+    ****  (changes based on the width) */
+drawS(TextWidth,TextHeight,FontSize,CurrentLine,ColumnNumber) :-
+  CurrentLine < FontSize,
+  drawSymbol('*',TextWidth).
+
+/* the left part of S after the top band*/
+drawS(TextWidth,TextHeight,FontSize,CurrentLine,ColumnNumber) :-
+  CurrentLine >= FontSize,
+  CurrentLine < 2* FontSize,
+  drawSymbol('*',FontSize),
+  drawSymbol(' ',TextWidth - FontSize).
+
+/* middle line */
+drawS(TextWidth, TextHeight, FontSize, CurrentLine, ColumnNumber) :-
+  CurrentLine < 3* FontSize,
+  CurrentLine >= 2* FontSize,
+  drawSymbol('*',TextWidth).
+
+/*right part of the S*/
+drawS(TextWidth, TextHeight, FontSize, CurrentLine, ColumnNumber) :-
+  CurrentLine >= 3* FontSize,
+  CurrentLine < 4* FontSize,
+  drawSymbol(' ', TextWidth - FontSize), 
+  drawSymbol('*',FontSize).
+
+/* bottom part, simialr to the top one*/
+drawS(TextWidth,TextHeight,FontSize,CurrentLine,ColumnNumber) :-
+  CurrentLine >= 4*FontSize,
+  CurrentLine <TextHeight,
+  drawSymbol('*',TextWidth).
+
+/* draw S */
 
 /*-------------------------------------------------------------------------------------------------*/
 /* WRITE RULES FOR drawU HERE*/
-/*-------------------------------------------------------------------------------------------------*/
+%base case, return true when finished printing
+drawU(TextWidth,TextHeight,FontSize,CurrentLine,ColumnNumber):-
+  ColumnNumber >= TextWidth.
 
+%2 columns up the sides
+drawU(TextWidth,TextHeight,FontSize,CurrentLine,ColumnNumber):-
+  (
+      (ColumnNumber >= 0, ColumnNumber < FontSize);
+      (ColumnNumber >= FontSize *2, ColumnNumber < TextWidth)
+  ),
+  drawSymbol('*',FontSize),
+  NextColumn is ColumnNumber + FontSize,
+  drawU(TextWidth,TextHeight,FontSize,CurrentLine,NextColumn).
 
+%Middle Part at the bottom
+drawU(TextWidth,TextHeight,FontSize,CurrentLine,ColumnNumber):-
+  (ColumnNumber >= FontSize,ColumnNumber< FontSize * 2),
+  (
+      (CurrentLine >= FontSize * 4, CurrentLine < TextHeight)
+  ),
+  drawSymbol('*',FontSize),
+  NextColumn is ColumnNumber + FontSize,
+  drawU(TextWidth,TextHeight,FontSize,CurrentLine,NextColumn).
+
+%Filling in spaces in the middle
+drawU(TextWidth,TextHeight,FontSize,CurrentLine,ColumnNumber):-
+  (ColumnNumber >= FontSize,ColumnNumber< FontSize*2),
+  (
+      (CurrentLine >= 0,CurrentLine < 4 * FontSize)
+  ),
+  drawSymbol(' ',FontSize),
+  NextColumn is ColumnNumber + FontSize,
+  drawU(TextWidth,TextHeight,FontSize,CurrentLine,NextColumn).
 
 /* draw the text with appropriate spacing*/
 draw(LeftRightMargin, SpaceBetweenCharacters, FontSize, CurrentLine, TextWidth, TextHeight) :-
@@ -84,17 +145,26 @@ draw(LeftRightMargin, SpaceBetweenCharacters, FontSize, CurrentLine, TextWidth, 
   /*---------------------------------------------*/
   /** CALL YOUR RULES HERE **/
   % add spaces here between A and S
+  drawSymbol(' ', SpaceBetweenCharacters),
+
   % call drawS
+  drawS(TextWidth, TextHeight, FontSize, CurrentLine, ColumnNumber),
+
   % add spaces here between S and U
+  drawSymbol(' ', SpaceBetweenCharacters),
+
   % call drawU
+  ColumnNumber is 0,
+  drawU(TextWidth,TextHeight,FontSize,CurrentLine,ColumnNumber),
+
+
   /*---------------------------------------------*/
+
   drawSymbol(' ', LeftRightMargin),
   write('|'),
   nl,
   NextLine is CurrentLine + 1,
   draw(LeftRightMargin, SpaceBetweenCharacters, FontSize, NextLine, TextWidth, TextHeight).
-
-
 
 /* this will be initiating the variables and will be called from asu() */
 drawVerticalLinesWithCharacters(LeftRightMargin, BottomTopMargin, SpaceBetweenCharacters, FontSize) :-
@@ -102,8 +172,6 @@ drawVerticalLinesWithCharacters(LeftRightMargin, BottomTopMargin, SpaceBetweenCh
   TextWidth is FontSize * 3,
   TextHeight is FontSize * 5,
   draw(LeftRightMargin, SpaceBetweenCharacters, FontSize, CurrentLine, TextWidth, TextHeight).
-
-
 
 /* this will be used from the console */
 asu(LeftRightMargin, BottomTopMargin, SpaceBetweenCharacters, FontSize) :-
