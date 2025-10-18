@@ -1,10 +1,10 @@
-drawSymbol(Symbol, 0).
+drawSymbol(_Symbol, 0).
 drawSymbol(Symbol, N) :- N > 0, write(Symbol), N1 is N - 1, drawSymbol(Symbol, N1).
 
-drawHorizontalLine(Symbol, 0) :- nl.
+drawHorizontalLine(_Symbol, 0) :- nl.
 drawHorizontalLine(Symbol, N) :- drawSymbol(Symbol, N).
 
-drawVerticalLinesWithSpace(Symbol, 0, Width).
+drawVerticalLinesWithSpace(_Symbol, 0, _Width).
 drawVerticalLinesWithSpace(Symbol, Height, Width) :- 
   Height > 0,
   write(Symbol),
@@ -16,7 +16,7 @@ drawVerticalLinesWithSpace(Symbol, Height, Width) :-
 
 /*-------------------------------------------------------------------------------------------------*/
 /* draw A */
-drawA(TextWidth, TextHeight, FontSize, CurrentLine, ColumnNumber) :-
+drawA(TextWidth, _TextHeight, _FontSize, _CurrentLine, ColumnNumber) :-
   ColumnNumber >= TextWidth.
 
 /* 
@@ -60,20 +60,20 @@ drawA(TextWidth, TextHeight, FontSize, CurrentLine, ColumnNumber) :-
 
 /* WRITE RULES FOR drawS HERE*/
 /*-------------------------------------------------------------------------------------------------*/
-drawS(TextWidth,TextHeight,FontSize,CurrentLine,ColumnNumber) :-
+drawS(TextWidth,_TextHeight,_FontSize,_CurrentLine,ColumnNumber) :-
   ColumnNumber >= TextWidth.  %similar to A letter part 
 
 /* this is the top part of the 
 s->      ****
          ****  (changes based on the width) */
-drawS(TextWidth,TextHeight,FontSize,CurrentLine,ColumnNumber) :-
+drawS(TextWidth,_TextHeight,FontSize,CurrentLine,_ColumnNumber) :-
   CurrentLine < FontSize,   %prints only until the fontsize (eg, FontSize= 2 then "**")
   drawSymbol('*',TextWidth).
 
 /* the left part of S after the top band
 s-> ****
     ****  (changes based on the width) */
-drawS(TextWidth,TextHeight,FontSize,CurrentLine,ColumnNumber) :-
+drawS(TextWidth,_TextHeight,FontSize,CurrentLine,_ColumnNumber) :-
   CurrentLine >= FontSize,  %to ensure we are after the top part
   CurrentLine < 2* FontSize, %since we are prinitig on the left side not the entire FontSize
   drawSymbol('*',FontSize), 
@@ -82,7 +82,7 @@ drawS(TextWidth,TextHeight,FontSize,CurrentLine,ColumnNumber) :-
 /* middle line
 s->      ****
          ****  (changes based on the width) */
-drawS(TextWidth, TextHeight, FontSize, CurrentLine, ColumnNumber) :-
+drawS(TextWidth, _TextHeight, FontSize, CurrentLine, _ColumnNumber) :-
   CurrentLine < 3* FontSize, %to ensure we are not accidently prinitng left side part
   CurrentLine >= 2* FontSize,
   drawSymbol('*',TextWidth).
@@ -90,7 +90,7 @@ drawS(TextWidth, TextHeight, FontSize, CurrentLine, ColumnNumber) :-
 /*right part of the S
 s->            ****
                ****  (changes based on the width) */
-drawS(TextWidth, TextHeight, FontSize, CurrentLine, ColumnNumber) :-
+drawS(TextWidth, _TextHeight, FontSize, CurrentLine, _ColumnNumber) :-
   CurrentLine >= 3* FontSize, %to ensure we are not accidently printing the middle part
   CurrentLine < 4* FontSize,
   drawSymbol(' ', TextWidth - FontSize), 
@@ -99,7 +99,7 @@ drawS(TextWidth, TextHeight, FontSize, CurrentLine, ColumnNumber) :-
 /* bottom part, simialr to the top one
 s-> ****
     ****  (changes based on the width) */
-drawS(TextWidth,TextHeight,FontSize,CurrentLine,ColumnNumber) :-
+drawS(TextWidth,TextHeight,FontSize,CurrentLine,_ColumnNumber) :-
   CurrentLine >= 4*FontSize, 
   CurrentLine <TextHeight, %printing until the height of the text
   drawSymbol('*',TextWidth).
@@ -109,7 +109,7 @@ drawS(TextWidth,TextHeight,FontSize,CurrentLine,ColumnNumber) :-
 
 /* WRITE RULES FOR drawU HERE*/
 %base case, return true when finished printing
-drawU(TextWidth,TextHeight,FontSize,CurrentLine,ColumnNumber):-
+drawU(TextWidth,_TextHeight,_FontSize,_CurrentLine, ColumnNumber):-
   ColumnNumber >= TextWidth.
 
 %2 columns up the sides
@@ -143,7 +143,7 @@ drawU(TextWidth,TextHeight,FontSize,CurrentLine,ColumnNumber):-
   drawU(TextWidth,TextHeight,FontSize,CurrentLine,NextColumn).
 
 /* draw the text with appropriate spacing*/
-draw(LeftRightMargin, SpaceBetweenCharacters, FontSize, CurrentLine, TextWidth, TextHeight) :-
+draw(_LeftRightMargin, _SpaceBetweenCharacters, _FontSize, CurrentLine, _TextWidth, TextHeight) :-
   CurrentLine >= TextHeight.
 draw(LeftRightMargin, SpaceBetweenCharacters, FontSize, CurrentLine, TextWidth, TextHeight) :-
   CurrentLine < TextHeight,
@@ -175,7 +175,7 @@ draw(LeftRightMargin, SpaceBetweenCharacters, FontSize, CurrentLine, TextWidth, 
   draw(LeftRightMargin, SpaceBetweenCharacters, FontSize, NextLine, TextWidth, TextHeight).
 
 /* this will be initiating the variables and will be called from asu() */
-drawVerticalLinesWithCharacters(LeftRightMargin, BottomTopMargin, SpaceBetweenCharacters, FontSize) :-
+drawVerticalLinesWithCharacters(LeftRightMargin, _BottomTopMargin, SpaceBetweenCharacters, FontSize) :-
   CurrentLine is 0,
   TextWidth is FontSize * 3,
   TextHeight is FontSize * 5,
