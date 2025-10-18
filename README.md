@@ -1,7 +1,7 @@
 # CSE259PrintingASU
-In this project, we will print a pattern that looks like the following image, which says ASU inside a rectangle. The graders will be doing queries like asu(LeftRightMargin, BottomTopMargin, SpaceBetweenCharacters, FontSize). For example, asu(3, 1, 3, 3). We are going to check with different values of these variables. 
+In this project, we will print a pattern that looks like the following image, which says ASU inside a rectangle. The graders will be doing queries like asu(LeftRightMargin, BottomTopMargin, SpaceBetweenCharacters, FontSize). For example, asu(3, 1, 3, 3). We are going to check with different values of these variables. We split the tasks equally with members working on each letter (S and U). We also added a check to ensure if the values are negative it outputs "False" (boundry check)
 
-Project Members : 
+Project Members (2) : 
 Lukas Kettner
 Manushri Muruga kumar
 
